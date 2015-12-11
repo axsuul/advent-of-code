@@ -7,7 +7,6 @@ def say(input)
   input_split = input.split('')
 
   count = 0
-  current_char = input_split.first
 
   input_split.each_with_index do |char, i|
     next_char = input_split[i+1]
