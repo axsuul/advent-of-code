@@ -41,7 +41,7 @@ combos.each do |combo|
     right_points = guestlist[guest][right]
 
     total +=  left_points + right_points
-  end
+.  end
 
   totals << total
 end
