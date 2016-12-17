@@ -12,9 +12,24 @@ let readInputLines = function(filename, callback) {
   });
 }
 
-let findKeys = function(salt, n) {
+let findKeys = function(salt, n, stretch = 1) {
+  let md5Cache = {};
   let index = 0;
   let keys = [];
+
+  let hashString = function(str) {
+    if (md5Cache.hasOwnProperty(str)) return md5Cache[str];
+
+    let hash = str;
+
+    for (var i = 0; i < stretch; i++) {
+      hash = md5(hash);
+    }
+    
+    md5Cache[str] = hash;
+
+    return hash;
+  }
 
   let findRepeating = function(num, str) {
     let repeats = [];
@@ -36,19 +51,18 @@ let findKeys = function(salt, n) {
   }
 
   while (keys.length < n) {
-    let hash = md5(salt + index);
+    let hash = hashString(salt + index);
     let threePeats = findRepeating(3, hash);
-
-    //console.log(`At key: ${index}`);
 
     if (threePeats.length > 0) {
       let char = threePeats[0];
 
       for (var j = index + 1; j < index + 1000; j++) {
-        let fivePeats = findRepeating(5, md5(salt + j));
+        let fiveHash = hashString(salt + j);
+        let fivePeats = findRepeating(5, fiveHash);
 
         if (fivePeats.indexOf(char) >= 0) {
-          console.log(`Found key at ${index}`);
+          console.log(`Found key at ${index} - ${j}: ${hash}`);
           keys.push([index, hash]);
           break;
         }
@@ -61,9 +75,13 @@ let findKeys = function(salt, n) {
   return keys;
 }
 
-keys = findKeys('ihaygndm', 64);
+let input = 'ihaygndm';
+//let input = 'abc';
 
+// Part 1
+keys = findKeys(input, 64);
 console.log(keys);
 
-
-
+// Part 2
+keys = findKeys(input, 64, 2017);
+console.log(keys);
