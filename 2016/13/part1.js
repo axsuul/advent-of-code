@@ -34,7 +34,6 @@ let buildMaze = function(favNum, size) {
   }
 
   return maze;
-
 }
 
 let printMaze = function(maze, solution = []) {
@@ -125,7 +124,7 @@ let doPart1 = function(dest, favNum) {
       break;
     }
   }
-};
+}
 
 //doPart1([7, 4], 10);
 doPart1([31, 39], 1362);
