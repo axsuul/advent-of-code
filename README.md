@@ -3,4 +3,5 @@
 My solutions to [Advent of Code](http://adventofcode.com)
 
 - [2015](2015) with Ruby
-- [2016](2016) with JavaScript *(In Progress)*
+- [2016](2016) with JavaScript
+- [2017](2017) with Elixir (*In Progress*)
