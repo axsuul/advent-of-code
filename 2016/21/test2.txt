@@ -1,0 +1,15 @@
+rotate right 1 step
+swap position 2 with position 4
+rotate based on position of letter g
+rotate left 4 steps
+swap position 6 with position 0
+swap letter h with letter a
+swap letter d with letter c
+reverse positions 2 through 4
+swap position 2 with position 4
+swap letter d with letter e
+reverse positions 1 through 5
+swap letter b with letter a
+rotate right 0 steps
+swap position 7 with position 3
+move position 2 to position 1
