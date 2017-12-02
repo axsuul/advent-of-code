@@ -1,5 +1,5 @@
-Install Elixir and run script with 
+Install Elixir and run scripts with 
 
 ```elixir
-$ elixir main.exs
+$ elixir <FILE>
 ```
