@@ -1,5 +1,9 @@
 # Advent of Code 2017
 
+I took this year's opportunity to use a language I've been meaning to play with -- [Elixir](http://elixir-lang.github.io/).
+
+## Progress
+
 - [x] [Day 01](01)
 - [ ] [Day 02](02)
 - [ ] [Day 03](03)
@@ -27,6 +31,7 @@
 - [ ] [Day 25](25)
 
 ## How to Use
+
 Install Elixir and run scripts with 
 
 ```elixir
