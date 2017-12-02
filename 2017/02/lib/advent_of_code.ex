@@ -43,10 +43,10 @@ defmodule AdventOfCode do
   end
 
   def a do
-    IO.puts(AdventOfCode.calculate_checksum_a("inputs/spreadsheet.txt"))
+    "inputs/spreadsheet.txt" |> AdventOfCode.calculate_checksum_a |> IO.inspect
   end
 
   def b do
-    IO.puts(AdventOfCode.calculate_checksum_b("inputs/spreadsheet.txt"))
+    "inputs/spreadsheet.txt" |> AdventOfCode.calculate_checksum_b |> IO.inspect
   end
 end
