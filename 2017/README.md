@@ -1,6 +1,6 @@
 # Advent of Code 2017
 
-I took this year's opportunity to use a language I've been meaning to play with -- [Elixir](http://elixir-lang.github.io/).
+I took this year's opportunity to use a language I've been meaning to dabble with -- [Elixir](http://elixir-lang.github.io/).
 
 ## Progress
 
@@ -29,11 +29,3 @@ I took this year's opportunity to use a language I've been meaning to play with 
 - [ ] [Day 23](23)
 - [ ] [Day 24](24)
 - [ ] [Day 25](25)
-
-## How to Use
-
-Install Elixir and run scripts with 
-
-```elixir
-$ elixir <FILE>
-```
