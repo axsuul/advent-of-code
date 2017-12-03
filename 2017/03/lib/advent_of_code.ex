@@ -105,6 +105,7 @@ defmodule AdventOfCode do
   def a do
     {x, y} = a_get_coord(361527)
 
+    # Calculate Manhattan distance
     abs(x) + abs(y) |> IO.inspect
   end
 
