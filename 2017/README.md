@@ -6,7 +6,7 @@ I took this year's opportunity to use a language I've been meaning to dabble wit
 
 - [x] [Day 01](01)
 - [x] [Day 02](02)
-- [ ] [Day 03](03)
+- [x] [Day 03](03)
 - [ ] [Day 04](04)
 - [ ] [Day 05](05)
 - [ ] [Day 06](06)
