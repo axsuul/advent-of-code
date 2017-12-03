@@ -1,5 +1,6 @@
 defmodule AdventOfCode do
-  def a_get_coord(target,
+  def get_coord(:a,
+                target,
                 square \\ 1,
                 coord \\ {0, 0},
                 grid \\ %{0 => %{ 0 => 1 }},
@@ -37,15 +38,16 @@ defmodule AdventOfCode do
     if target == square do
       coord
     else
-      a_get_coord(target, square, coord, grid, instruction)
+      get_coord(:a, target, square, coord, grid, instruction)
     end
   end
 
-  def b_get_value(min,
-                  square \\ 1,
-                  coord \\ {0, 0},
-                  grid \\ %{0 => %{ 0 => 1 }},
-                  instruction \\ :right) do
+  def get_value(:b,
+                min,
+                square \\ 1,
+                coord \\ {0, 0},
+                grid \\ %{0 => %{ 0 => 1 }},
+                instruction \\ :right) do
     {x, y} = coord
 
     # If we need to change direction but don't need to change
@@ -98,18 +100,18 @@ defmodule AdventOfCode do
     if square > min do
       {square, coord}
     else
-      b_get_value(min, square, coord, grid, instruction)
+      get_value(:b, min, square, coord, grid, instruction)
     end
   end
 
   def a do
-    {x, y} = a_get_coord(361527)
+    {x, y} = get_coord(:a, 361527)
 
     # Calculate Manhattan distance
     abs(x) + abs(y) |> IO.inspect
   end
 
   def b do
-    b_get_value(361527) |> IO.inspect
+    get_value(:b, 361527) |> IO.inspect
   end
 end
