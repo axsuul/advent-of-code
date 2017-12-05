@@ -1,6 +1,6 @@
 # Advent of Code 2017
 
-I took this year's opportunity to use a language I've been meaning to dabble with -- [Elixir](http://elixir-lang.github.io/).
+I took this year's opportunity to use a language I've been meaning to dabble with -- [Elixir](http://elixir-lang.github.io/).  If my code isn't looking very idiomatic or Elixir-like, I'd love for you to open an issue to put me in my place.
 
 ## Progress
 
