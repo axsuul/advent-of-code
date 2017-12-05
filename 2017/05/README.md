@@ -2,6 +2,6 @@
 
 ```
 $ mix deps.get
-$ mix run -e AdventOfCode.a
-$ mix run -e AdventOfCode.b
+$ mix run -e AdventOfCodeA.solve
+$ mix run -e AdventOfCodeB.solve
 ```
