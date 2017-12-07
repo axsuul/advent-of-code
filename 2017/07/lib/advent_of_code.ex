@@ -31,11 +31,14 @@ defmodule AdventOfCode do
     # what's below them
     |> put_in([name, :above], above)
     |> (&Enum.reduce(above, &1, fn above_name, tower ->
-      unless tower[above_name] do
-        tower = add_program(tower, above_name)
-      end
+      new_tower =
+        unless tower[above_name] do
+          add_program(tower, above_name)
+        else
+          tower
+        end
 
-      put_in(tower, [above_name, :below], tower[above_name][:below] ++ [name])
+      put_in(new_tower, [above_name, :below], new_tower[above_name][:below] ++ [name])
     end)).()
   end
 
@@ -79,13 +82,7 @@ defmodule AdventOfCode do
     odd =
       tallies
       |> Enum.reduce(%{}, fn stats, weight_tallies ->
-        weight = stats[:total_weight]
-
-        unless weight_tallies[weight] do
-          weight_tallies = put_in(weight_tallies, [weight], 0)
-        end
-
-        weight_tallies = put_in(weight_tallies, [weight], weight_tallies[weight] + 1)
+        Map.update(weight_tallies, stats[:total_weight], 1, fn value -> value + 1 end)
       end)
       |> Enum.filter(fn {total_weight, count} -> count == 1 end)
 
