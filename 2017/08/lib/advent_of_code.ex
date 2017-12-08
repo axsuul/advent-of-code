@@ -73,15 +73,13 @@ defmodule AdventOfCode do
 
   def solve_a do
     "inputs/input.txt"
-    |> run
-    |> max_register_value
+    |> run()
+    |> max_register_value()
     |> IO.inspect
   end
 
   def solve_b do
-    {_, max} =
-      "inputs/input.txt"
-      |> run_max()
+    {_, max} = "inputs/input.txt" |> run_max()
 
     max |> IO.inspect
   end
