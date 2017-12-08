@@ -9,6 +9,7 @@ defmodule AdventOfCode do
       condition
     ] = Regex.run(~r/^(\w+) (\w+) (\-?\d+) if (\w+) (.+)/, line)
 
+    # Eval string to Elixir code
     value = get_value(register, dependent_variable)
     {result, _} = Code.eval_string(Integer.to_string(value) <> " " <> condition)
 
@@ -42,12 +43,31 @@ defmodule AdventOfCode do
 
   defp max_register_value(register) do
     register
-    |> Enum.reduce(nil, fn {var, value}, max ->
+    |> Enum.reduce(nil, fn {_, value}, max ->
       cond do
         max == nil -> value
         max < value -> value
-        max > value -> max
+        max >= value -> max
       end
+    end)
+  end
+
+  defp run_max(filename) do
+    filename
+    |> File.read!
+    |> String.split("\n")
+    |> Enum.reduce({%{}, nil}, fn line, {register, max} ->
+      new_register = run_line(register, line)
+      max_value = max_register_value(new_register)
+
+      new_max =
+        cond do
+          max == nil -> max_value
+          max < max_value -> max_value
+          max >= max_value -> max
+        end
+
+      {new_register, new_max}
     end)
   end
 
@@ -56,5 +76,13 @@ defmodule AdventOfCode do
     |> run
     |> max_register_value
     |> IO.inspect
+  end
+
+  def solve_b do
+    {_, max} =
+      "inputs/input.txt"
+      |> run_max()
+
+    max |> IO.inspect
   end
 end
