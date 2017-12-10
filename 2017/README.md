@@ -13,7 +13,7 @@ I took this year's opportunity to use a language I've been meaning to dabble wit
 - [x] [Day 07](07)
 - [x] [Day 08](08)
 - [x] [Day 09](09)
-- [ ] [Day 10](10)
+- [x] [Day 10](10)
 - [ ] [Day 11](11)
 - [ ] [Day 12](12)
 - [ ] [Day 13](13)
