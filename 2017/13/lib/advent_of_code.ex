@@ -35,7 +35,11 @@ defmodule AdventOfCode do
       |> put_in([depth, :pos], new_pos)
     end
 
-    def move_scanners(state, last_depth), do: move_scanners(state, last_depth, 0)
+    def last_depth(state) do
+      Map.keys(state) |> Enum.sort |> List.last
+    end
+
+    def move_scanners(state), do: move_scanners(state, last_depth(state), 0)
     def move_scanners(state, last_depth, depth) when depth > last_depth, do: state
     def move_scanners(state, last_depth, depth) do
       new_state =
@@ -47,7 +51,7 @@ defmodule AdventOfCode do
       move_scanners(new_state, last_depth, depth + 1)
     end
 
-    def move_packet(state, depth) do
+    defp move_packet(state, depth) do
       cond do
         Map.has_key?(state, depth) ->
           case get_in(state, [depth, :pos]) do
@@ -59,24 +63,67 @@ defmodule AdventOfCode do
       end
     end
 
-    def calc_severity(state) do
-      last_depth = Map.keys(state) |> Enum.sort |> List.last
-
-      calc_severity(state, 0, 0, last_depth)
-    end
+    def calc_severity(state), do: calc_severity(state, 0, 0, last_depth(state))
     def calc_severity(state, depth, severity, last_depth) when depth > last_depth, do: severity
     def calc_severity(state, depth, severity, last_depth) do
       more_severity = move_packet(state, depth)
 
       state
-      |> move_scanners(last_depth)
+      |> move_scanners()
       |> calc_severity(depth + 1, severity + more_severity, last_depth)
     end
 
     def solve do
       read_input()
-      |> initialize
-      |> calc_severity
+      |> initialize()
+      |> calc_severity()
+      |> IO.inspect
+    end
+  end
+
+  defmodule PartB do
+    import PartA
+
+    def move_packet(state, depth) do
+      cond do
+        Map.has_key?(state, depth) ->
+          case get_in(state, [depth, :pos]) do
+            pos when pos == 0 -> true
+            pos -> false
+          end
+        true -> false
+      end
+    end
+
+    def is_caught(state), do: is_caught(state, 0, 0, last_depth(state))
+    def is_caught(state, depth, true, last_depth), do: true
+    def is_caught(state, depth, is_caught, last_depth) when depth > last_depth, do: false
+    def is_caught(state, depth, is_caught, last_depth) do
+      is_caught = move_packet(state, depth)
+
+      state
+      |> move_scanners()
+      |> is_caught(depth + 1, is_caught, last_depth)
+    end
+
+    def delay_state(state, 0), do: state
+    def delay_state(state, delay) do
+      move_scanners(state)
+      |> delay_state(delay - 1)
+    end
+
+    def try_delay(state), do: try_delay(state, 0)
+    def try_delay(state, delay) do
+      case is_caught(state) do
+        false -> delay
+        true -> move_scanners(state) |> try_delay(delay + 1)
+      end
+    end
+
+    def solve do
+      read_input()
+      |> initialize()
+      |> try_delay()
       |> IO.inspect
     end
   end

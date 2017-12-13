@@ -16,7 +16,7 @@ I took this year's opportunity to use a language I've been meaning to dabble wit
 - [x] [Day 10](10)
 - [x] [Day 11](11)
 - [x] [Day 12](12)
-- [ ] [Day 13](13)
+- [x] [Day 13](13)
 - [ ] [Day 14](14)
 - [ ] [Day 15](15)
 - [ ] [Day 16](16)
