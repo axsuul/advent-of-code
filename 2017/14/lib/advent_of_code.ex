@@ -80,10 +80,7 @@ end
 
 defmodule AdventOfCode do
   defmodule PartA do
-    def read_input do
-      # "flqrgnkx"
-      "oundnydw"
-    end
+    @input "oundnydw"
 
     def hex_to_binary(str) when is_binary(str) do
       hex_to_binary(String.split(str, "", trim: true))
@@ -114,11 +111,11 @@ defmodule AdventOfCode do
     end
 
     def grid_key(x, y) do
-      Integer.to_string(x) <> Integer.to_string(y)
+      Integer.to_string(x) <> "," <> Integer.to_string(y)
     end
 
-    def build_row(grid, x, _, _, used_count) when x > 127, do: {grid, used_count}
-    def build_row(grid, x, y, binary, used_count) do
+    defp build_row(grid, x, _, _, used_count) when x > 127, do: {grid, used_count}
+    defp build_row(grid, x, y, binary, used_count) do
       is_free = if String.at(binary, x) == "0", do: true, else: false
       new_used_count = if is_free, do: used_count, else: used_count + 1
 
@@ -126,9 +123,9 @@ defmodule AdventOfCode do
       |> build_row(x + 1, y, binary, new_used_count)
     end
 
-    def build_grid(key), do: build_grid(%{}, key, 0, 0)
-    def build_grid(_, _, y, used_count) when y > 127, do: used_count
-    def build_grid(grid, key, y, used_count) do
+    defp build_grid(key), do: build_grid(%{}, key, 0, 0)
+    defp build_grid(_, _, y, used_count) when y > 127, do: used_count
+    defp build_grid(grid, key, y, used_count) do
       binary =
         key <> "-" <> Integer.to_string(y)
         |> KnotHash.calc()
@@ -141,9 +138,87 @@ defmodule AdventOfCode do
     end
 
     def solve do
-      read_input()
+      @input
       |> build_grid
       |> IO.inspect
+    end
+  end
+
+  defmodule PartB do
+    import PartA
+
+    @grid_size 128
+
+    def build_row(grid, x, _, _) when x >= @grid_size, do: grid
+    def build_row(grid, x, y, binary) do
+      is_used = if String.at(binary, x) == "1", do: true, else: false
+      props = %{is_used: is_used, in_region: false}
+
+      Map.put(grid, grid_key(x, y), props)
+      |> build_row(x + 1, y, binary)
+    end
+
+    def build_grid(key), do: build_grid(%{}, key, 0)
+    def build_grid(grid, _, y) when y >= @grid_size, do: grid
+    # def build_grid(grid, _, y) when y > 127, do: grid
+    def build_grid(grid, key, y) do
+      binary =
+        key <> "-" <> Integer.to_string(y)
+        |> KnotHash.calc()
+        |> hex_to_binary
+
+      changed_grid = build_row(grid, 0, y, binary)
+
+      build_grid(changed_grid, key, y + 1)
+    end
+
+    def add_region(state, x, y, _) when x < 0, do: state
+    def add_region(state, x, y, _) when y < 0, do: state
+    def add_region(state, x, y, _) when x >= @grid_size, do: state
+    def add_region(state, x, y, _) when y >= @grid_size, do: state
+    def add_region({grid, regions_count}, x, y, is_adjacent_region \\ false) do
+      key = grid_key(x, y)
+      %{is_used: is_used, in_region: in_region} = Map.fetch!(grid, key)
+
+      cond do
+        !is_used -> {grid, regions_count}
+        in_region == true -> {grid, regions_count}
+        true ->
+          changed_regions_count =
+            if is_adjacent_region do
+              regions_count
+            else
+              regions_count + 1
+            end
+
+          changed_grid = put_in(grid, [key, :in_region], true)
+
+          add_region({changed_grid, changed_regions_count}, x + 1, y, true)
+          |> add_region(x - 1, y, true)
+          |> add_region(x, y + 1, true)
+          |> add_region(x, y - 1, true)
+      end
+    end
+
+    def build_regions(grid), do: build_regions(grid, 0, 0, 0)
+    def build_regions(grid, x, y, regions_count) when y >= @grid_size, do: regions_count
+    def build_regions(grid, x, y, regions_count) when x >= @grid_size do
+      build_regions(grid, 0, y + 1, regions_count)
+    end
+    def build_regions(grid, x, y, regions_count) do
+      {changed_grid, changed_regions_count} = add_region({grid, regions_count}, x, y)
+
+      build_regions(changed_grid, x + 1, y, changed_regions_count)
+    end
+
+    def solve do
+      regions_count =
+        @input
+        |> build_grid
+        |> IO.inspect
+        |> build_regions
+
+      IO.puts "Regions: " <> Integer.to_string(regions_count)
     end
   end
 end
