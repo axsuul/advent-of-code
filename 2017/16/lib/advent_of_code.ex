@@ -49,13 +49,54 @@ defmodule AdventOfCode do
     def dance(programs, [instruction | rest]) do
       programs
       |> do_instruction(instruction)
-      |> IO.inspect
       |> dance(rest)
     end
 
     def solve do
       gen_programs()
       |> dance(read_input)
+      |> Enum.join("")
+      |> IO.inspect
+    end
+  end
+
+  defmodule PartB do
+    import PartA
+
+    def count_until_repeat(programs, instructions, count \\ 0)
+    def count_until_repeat(programs, instructions, count) do
+      programs_key = programs |> Enum.join("")
+
+      if count > 0 && gen_programs() == programs do
+        count
+      else
+        programs
+        |> dance(instructions)
+        |> count_until_repeat(instructions, count + 1)
+      end
+    end
+
+    def dance_for(programs, until, count \\ 0)
+    def dance_for(programs, until, count) when count == until, do: programs
+    def dance_for(programs, until, count) do
+      programs
+      |> dance(read_input())
+      |> dance_for(until, count + 1)
+    end
+
+    def solve do
+      input = read_input()
+
+      repeats_every =
+        gen_programs()
+        |> count_until_repeat(input)
+
+      # Find out where we need to start dancing from
+      # in order to simulate 1 billionth since it repeats
+      remaining = rem(1_000_000_000, repeats_every)
+
+      gen_programs()
+      |> dance_for(remaining)
       |> Enum.join("")
       |> IO.inspect
     end
