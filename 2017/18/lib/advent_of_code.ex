@@ -3,9 +3,8 @@ defmodule AdventOfCode do
     @input "input.txt"
     @instructions File.read!("inputs/" <> @input) |> String.split("\n")
 
-    def get(state, x) do
-      if is_binary(x), do: Map.get(state, x, 0), else: x
-    end
+    def get(state, x) when is_binary(x), do: Map.get(state, x, 0)
+    def get(state, x), do: x
 
     def set(state, x, y) do
       Map.put(state, x, y)
@@ -24,8 +23,6 @@ defmodule AdventOfCode do
       {set(state, x, get(state, x) * get(state, y)), 1}
     end
     def run_instruction(["mod", x, y], state) do
-      # IO.inspect {get(state, x), get(state, y)}
-      # IO.inspect state
       {set(state, x, get(state, x) |> rem(get(state, y))), 1}
     end
     def run_instruction(["rcv", x], state) do
