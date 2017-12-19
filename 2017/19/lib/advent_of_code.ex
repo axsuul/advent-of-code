@@ -37,7 +37,7 @@ defmodule AdventOfCode do
       end
     end
 
-    def travel(diagram) do
+    defp travel(diagram) do
       # Find start
       start =
         Map.fetch!(diagram, 0)
@@ -47,9 +47,8 @@ defmodule AdventOfCode do
 
       travel(diagram, start, :down, [])
     end
-    def travel(_, _, :end, history), do: history
-    def travel(diagram, {x, y}, direction, history) do
-      # next_pos = {x, y - 1}
+    defp travel(_, _, :end, history), do: history
+    defp travel(diagram, {x, y}, direction, history) do
       cell = get_cell(diagram, {x, y})
 
       {next_pos, next_direction} =
@@ -82,8 +81,6 @@ defmodule AdventOfCode do
             }
         end
 
-      IO.inspect {next_pos, next_direction, history}
-
       travel(diagram, next_pos, next_direction, add_history(history, cell))
     end
 
@@ -91,6 +88,63 @@ defmodule AdventOfCode do
       build_diagram_from_input()
       |> travel()
       |> Enum.join("")
+      |> IO.inspect
+    end
+  end
+
+  defmodule PartB do
+    import PartA
+
+    def travel(diagram) do
+      # Find start
+      start =
+        Map.fetch!(diagram, 0)
+        |> Enum.reduce(nil, fn {x, cell}, start ->
+          if cell == "|", do: {x, 0}, else: start
+        end)
+
+      travel(diagram, start, :down, 0)
+    end
+    def travel(_, _, :end, steps), do: steps - 1
+    def travel(diagram, {x, y}, direction, steps) do
+      cell = get_cell(diagram, {x, y})
+
+      {next_pos, next_direction} =
+        case cell do
+          " " -> {{x, y}, :end}
+          "+" ->
+            case direction do
+              d when d in [:up, :down] ->
+                if empty_cell?(diagram, {x - 1, y}) do
+                  {{x + 1, y}, :right}
+                else
+                  {{x - 1, y}, :left}
+                end
+              d when d in [:left, :right] ->
+                if empty_cell?(diagram, {x, y - 1}) do
+                  {{x, y + 1}, :down}
+                else
+                  {{x, y - 1}, :up}
+                end
+            end
+          ___ ->
+            {
+              case direction do
+                :up    -> {x, y - 1}
+                :down  -> {x, y + 1}
+                :left  -> {x - 1, y}
+                :right -> {x + 1, y}
+              end,
+              direction
+            }
+        end
+
+      travel(diagram, next_pos, next_direction, steps + 1)
+    end
+
+    def solve do
+      build_diagram_from_input()
+      |> travel()
       |> IO.inspect
     end
   end

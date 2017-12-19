@@ -22,7 +22,7 @@ I took this year's opportunity to use a language I've been meaning to dabble wit
 - [x] [Day 16](16)
 - [x] [Day 17](17)
 - [x] [Day 18](18)
-- [ ] [Day 19](19)
+- [x] [Day 19](19)
 - [ ] [Day 20](20)
 - [ ] [Day 21](21)
 - [ ] [Day 22](22)
