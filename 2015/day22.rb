@@ -1,7 +1,7 @@
 require 'pry'
 
 queue = [];
-queue << { 
+queue << {
   player: { hp: 10, armor: 0, mana: 250, effects: {} },
   boss:   { hp: 13, effects: {} },
   moves: []
@@ -23,7 +23,7 @@ def add_effect(state, target, spell, duration)
 end
 
 # BFS
-while (state = queue.shift()) 
+while (state = queue.shift())
   move = state[:moves].last
 
   if move
@@ -54,9 +54,9 @@ while (state = queue.shift())
     target = (actor == :player ? :boss : :player)
 
     case move[:action]
-    when :attack 
+    when :attack
       state[target][:hp] -= (8 - state[target][:armor])
-    when :magic_missile 
+    when :magic_missile
       state[actor][:mana] -= 53
       state[target][:hp]  -= 4
     when :drain
@@ -83,7 +83,7 @@ while (state = queue.shift())
     next
   elsif state[:player][:mana] <= 0
     # Dead
-    next 
+    next
   end
 
   # next turn
