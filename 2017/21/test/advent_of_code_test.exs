@@ -102,23 +102,11 @@ defmodule AdventOfCodeTest do
       }
     }
 
-    # split_pattern =
-    #   split
-    #   |> Enum.reduce(%{}, fn {i, p}, pat ->
-    #     IO.inspect {i, get_in(p, [i]), pat}
-    #     # pattern = AdventOfCode.PartA.pixels_to_pattern(p)
-    #     # IO.inspect pattern
-    #     # put_in(pat, [i], pattern)
-    #   end)
+    joined_pattern =
+      split
+      |> AdventOfCode.PartA.join()
+      |> AdventOfCode.PartA.pixels_to_pattern()
 
-    # # split
-    # # |> AdventOfCode.PartA.pixels_to_pattern()
-
-    # # |> assert == [["#"]]
-
-    # assert split == %{
-    #   0 => %{0 => "#./..", 1 => ".#/.."},
-    #   1 => %{0 => "../#.", 1 => "../.#"}
-    # }
+    assert joined_pattern == pattern
   end
 end

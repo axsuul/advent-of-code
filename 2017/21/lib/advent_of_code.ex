@@ -87,30 +87,6 @@ defmodule AdventOfCode do
       flip(pixels, next_flipped, y - 1)
     end
 
-    # def split_section_row(pixels, section, size, y, x) do
-
-    # end
-    # def split_section_row(pixels, section, size, y, x) do
-    #   section_pixel = get_in(pixels, [])
-    #   next_section = put_in(section, [y, x])
-
-    # end
-
-    # def split_section(pixels, size, y, x) do
-    #   split_section(pixels, %{}, size, size - 1, size - 1)
-    # end
-    # def split_section(pixels, section, size, _, _) when map_size(section) == size do
-    #   section
-    # end
-    # def split_section(pixels, section, section_size, qy, qx) do
-    #   split_section_row(pixels, size, )
-
-
-    # end
-    # def split_row(pixels, split, section_size, max) do
-
-    # end
-
     def split_section_row(pixel_row, section_size, x) do
       split_section_row(pixel_row, %{}, x, section_size - 1)
     end
@@ -127,7 +103,6 @@ defmodule AdventOfCode do
     def split_section(_, section, _, y, x_max, sy) when sy < 0, do: section
     def split_section(pixels, section, section_size, y, x_max, sy) do
       section_row = split_section_row(get_in(pixels, [y]), section_size, x_max)
-      # IO.inspect {y, sy, section_row}
       next_section = put_in(section, [sy], section_row)
 
       split_section(pixels, next_section, section_size, y - 1, x_max, sy - 1)
@@ -160,6 +135,137 @@ defmodule AdventOfCode do
       next_split = put_in(split, [qy], sections)
 
       split(pixels, next_split, section_size, qy - 1)
+    end
+
+    def join(pixels) do
+      pixels
+      |> Enum.reduce(%{}, fn {qy, quadrant}, joined ->
+        next_joined =
+          quadrant
+          |> Enum.reduce(joined, fn {qx, section}, joined ->
+            section
+            |> Enum.reduce(joined, fn {sy, row}, joined ->
+              size = pixels_size(row)
+              y = qy*size + sy
+
+              row
+              |> Enum.reduce(Map.put_new(joined, y, %{}), fn {sx, val}, joined ->
+                x = qx*size + sx
+
+                put_in(joined, [y, x], val)
+              end)
+            end)
+          end)
+      end)
+    end
+
+    def read_input_lines(filename) do
+      File.read!("inputs/" <> filename)
+      |> String.split("\n")
+    end
+
+    def build_rules(filename \\ "input.txt") do
+      read_input_lines(filename)
+      |> Enum.reduce(%{}, fn line, rules ->
+        [input, output] = String.split(line, " => ")
+
+        input_pixels = pattern_to_pixels(input)
+        output_pixels = pattern_to_pixels(output)
+
+        flipped = flip(input_pixels)
+        rotated_90 = rotate(input_pixels)
+        flipped_90 = flip(rotated_90)
+        rotated_180 = rotate(rotated_90)
+        flipped_180 = flip(rotated_180)
+        rotated_270 = rotate(rotated_180)
+        flipped_270 = flip(rotated_270)
+
+        [
+          input_pixels,
+          flipped,
+          rotated_90,
+          flipped_90,
+          rotated_180,
+          flipped_180,
+          rotated_270,
+          flipped_270
+        ]
+        |> Enum.reduce(rules, fn p, rules ->
+          pattern = pixels_to_pattern(p)
+
+          put_in(rules, [pattern], output)
+        end)
+      end)
+    end
+
+    def enhance(pixels, _, n) when n == 0, do: pixels
+    def enhance(pixels, rules, n) do
+      next_pixels =
+        pixels
+        |> split()
+        |> Enum.reduce(%{}, fn {qy, row}, pixels ->
+          next_row =
+            row
+            |> Enum.reduce(%{}, fn {qx, section}, row ->
+              pattern = section |> pixels_to_pattern()
+
+              next_section =
+                get_in(rules, [pattern])
+                |> pattern_to_pixels()
+
+              put_in(row, [qx], next_section)
+            end)
+
+          put_in(pixels, [qy], next_row)
+        end)
+        |> join()
+
+      enhance(next_pixels, rules, n - 1)
+    end
+
+    def count_on(pixels) do
+      pixels
+      |> Enum.reduce(0, fn {_, row}, count ->
+        row
+        |> Enum.reduce(0, fn {_, val}, count ->
+          if val == "#", do: count + 1, else: count
+        end)
+        |> Kernel.+(count)
+      end)
+    end
+
+    def print(pixels) do
+      pixels
+      |> Enum.each(fn {y, row} ->
+        row
+        |> Enum.each(fn {x, val} ->
+          IO.write val
+        end)
+
+        IO.write "\n"
+      end)
+    end
+
+    def solve do
+      rules = build_rules()
+      pixels = pattern_to_pixels(".#./..#/###")
+
+      enhance(pixels, rules, 5)
+      |> count_on()
+      |> IO.inspect
+    end
+  end
+
+  defmodule PartB do
+    import PartA
+
+    def solve do
+      rules = build_rules()
+      pixels = pattern_to_pixels(".#./..#/###")
+
+      enhance(pixels, rules, 18)
+      |> count_on()
+      |> IO.inspect
     end
   end
 end
