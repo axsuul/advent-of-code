@@ -137,7 +137,7 @@ defmodule AdventOfCode do
       print_map(state, coord_min, coord_max, x + 1, y)
     end
 
-    def burst(map, iterations) do
+    defp burst(map, iterations) do
       state = %{map: map, x: 0, y: 0, infected: 0, direction: :up}
 
       Stream.unfold(state, fn state ->
@@ -158,6 +158,64 @@ defmodule AdventOfCode do
     def solve do
       load_map()
       |> burst(10_000)
+      |> Enum.map(&print_map/1)
+    end
+  end
+
+  defmodule PartB do
+    import PartA
+
+    def weaken(state) do
+      put_in(state, [:map, coord_key(state)], "W")
+    end
+
+    def flag(state) do
+      put_in(state, [:map, coord_key(state)], "F")
+    end
+
+    def weakened?(state) do
+      node_value(state) == "W"
+    end
+
+    def flagged?(state) do
+      node_value(state) == "F"
+    end
+
+    def reverse(state) do
+      next_direction =
+        case get_in(state, [:direction]) do
+          :up    -> :down
+          :down  -> :up
+          :right -> :left
+          :left  -> :right
+        end
+
+      put_in(state, [:direction], next_direction)
+    end
+
+    def burst(map, iterations) do
+      state = %{map: map, x: 0, y: 0, infected: 0, direction: :up}
+
+      Stream.unfold(state, fn state ->
+        next_state =
+          cond do
+            weakened?(state) -> infect(state)
+            infected?(state) -> turn_right(state) |> flag()
+            flagged?(state)  -> reverse(state) |> clean()
+            true             -> turn_left(state) |> weaken()
+          end
+          |> move_forward()
+
+        {state, next_state}
+      end)
+      |> Stream.drop(iterations)
+      |> Stream.take(1)
+      |> Enum.to_list
+    end
+
+    def solve do
+      load_map()
+      |> burst(10_000_000)
       |> Enum.map(&print_map/1)
     end
   end
