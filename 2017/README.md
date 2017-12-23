@@ -26,6 +26,6 @@ I took this year's opportunity to use a language I've been meaning to dabble wit
 - [x] [Day 20](20)
 - [x] [Day 21](21)
 - [x] [Day 22](22)
-- [ ] [Day 23](23)
+- [x] [Day 23](23)
 - [ ] [Day 24](24)
 - [ ] [Day 25](25)
