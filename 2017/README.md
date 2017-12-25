@@ -28,4 +28,4 @@ I took this year's opportunity to use a language I've been meaning to dabble wit
 - [x] [Day 22](22)
 - [x] [Day 23](23)
 - [x] [Day 24](24)
-- [ ] [Day 25](25)
+- [x] [Day 25](25)
