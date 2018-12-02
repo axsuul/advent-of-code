@@ -1,20 +1,22 @@
 import { readFileSync } from 'fs'
 import * as path from 'path'
 
-const inputPath = path.join(__dirname, 'inputs', 'input.txt')
-const input = readFileSync(inputPath, 'utf-8').split('\n')
+const inputPath: string = path.join(__dirname, 'inputs', 'input.txt')
+const input: string[] = readFileSync(inputPath, 'utf-8')
+  .split('\n')
 let commonLetters: string | undefined
 
 for (let i = 0; i < input[0].length; i++) {
-  const removed = input.slice().map((id) => {
-    const exploded = id.split('')
+  const removed: string[] = input.slice()
+    .map((id: string) => {
+      const exploded: string[] = id.split('')
 
-    exploded.splice(i, 1)
+      exploded.splice(i, 1)
 
-    return exploded.join('')
-  })
+      return exploded.join('')
+    })
 
-  const set = new Set()
+  const set: Set<string> = new Set()
 
   for (const idRemoved of removed) {
     if (set.has(idRemoved)) {
@@ -26,7 +28,9 @@ for (let i = 0; i < input[0].length; i++) {
     }
   }
 
-  if (commonLetters != undefined) break
+  if (commonLetters !== undefined) {
+    break
+  }
 }
 
 console.log(commonLetters)
