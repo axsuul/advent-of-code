@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import * as path from 'path'
 
-const inputPath = path.join(__dirname, 'inputs', 'a.txt')
+const inputPath = path.join(__dirname, 'inputs', 'input.txt')
 const input = readFileSync(inputPath, 'utf-8').split('\n')
 
 let twoCount = 0
