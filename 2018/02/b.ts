@@ -1,9 +1,7 @@
-import { readFileSync } from 'fs'
-import * as path from 'path'
+import { readInput } from '../helpers'
 
-const inputPath: string = path.join(__dirname, 'inputs', 'input.txt')
-const input: string[] = readFileSync(inputPath, 'utf-8')
-  .split('\n')
+const input: string[] = readInput('02', 'input')
+
 let commonLetters: string | undefined
 
 for (let i = 0; i < input[0].length; i++) {

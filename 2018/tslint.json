@@ -1,13 +1,26 @@
 {
     "defaultSeverity": "error",
     "extends": [
-      "tslint:all"
+      "tslint:recommended"
     ],
     "jsRules": {},
     "rules": {
+      "only-arrow-functions": [true, "allow-named-functions"],
+      "no-console": [false],
       "no-magic-numbers": [false],
       "quotemark": [true, "single"],
-      "semicolon": [false]
+      "semicolon": [false],
+      "typedef": [
+        true,
+        "call-signature",
+        "arrow-call-signature",
+        "parameter",
+        "arrow-parameter",
+        "property-declaration",
+        "member-variable-declaration",
+        "object-destructuring",
+        "array-destructuring"
+      ]
     },
     "rulesDirectory": []
 }

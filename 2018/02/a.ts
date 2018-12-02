@@ -1,9 +1,6 @@
-import { readFileSync } from 'fs'
-import * as path from 'path'
+import { readInput } from '../helpers'
 
-const inputPath: string = path.join(__dirname, 'inputs', 'input.txt')
-const input: string[] = readFileSync(inputPath, 'utf-8')
-  .split('\n')
+const input: string[] = readInput('02', 'input')
 
 let twoCount = 0
 let threeCount = 0
@@ -28,7 +25,7 @@ const tally = (id: string): [boolean, boolean] => {
 }
 
 input.forEach((id: string) => {
-  const [isTwo, isThree] = tally(id)
+  const [isTwo, isThree]: [boolean, boolean] = tally(id)
 
   if (isTwo) {
     twoCount += 1
