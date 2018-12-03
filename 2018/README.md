@@ -1,5 +1,9 @@
 # Advent of Code 2018
 
+## Dependencies
+
+* ts-node
+
 ## Usage
 
 ```
@@ -10,7 +14,7 @@ ts-node 01/a.ts
 
 - [x] [Day 01](01)
 - [x] [Day 02](02)
-- [ ] [Day 03](03)
+- [x] [Day 03](03)
 - [ ] [Day 04](04)
 - [ ] [Day 05](05)
 - [ ] [Day 06](06)
