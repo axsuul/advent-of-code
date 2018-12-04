@@ -5,6 +5,7 @@
     ],
     "jsRules": {},
     "rules": {
+      "interface-name": [true, "never-prefix"],
       "only-arrow-functions": [true, "allow-named-functions"],
       "no-console": [false],
       "no-magic-numbers": [false],
